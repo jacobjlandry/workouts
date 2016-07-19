@@ -38,6 +38,11 @@ class User extends Authenticatable
         }
     }
 
+    public function goal()
+    {
+        return $this->hasOne('\App\Goal')->first();
+    }
+
     /**
      * Get a user's points for the current week
      *
@@ -46,6 +51,11 @@ class User extends Authenticatable
     public function points()
     {
         return $this->hasOne('\App\WeeklyPoint')->first();
+    }
+
+    public function progress()
+    {
+        return round(($this->points()->points / $this->goal()->goal) * 100);
     }
 
     /**

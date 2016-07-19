@@ -1,95 +1,51 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Workouts</title>
+@extends('master')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+@section('content')
+    @if(!Auth::check())
+        <div class="title">Welcome!</div>
+        <div class="subtitle">Login to get started!</div>
+    @else
+        {{ Auth::user()->init() }}
+        <div class="title">Let's Work Out!</div>
+        <div class="subtitle"></div>
+    @endif
 
-        <style src="{{ asset('js/jquery.js') }}" type="text/javascript"></style>
+    @if(Auth::check() && !Auth::user()->goal()->count())
+        <script type="text/javascript">
+            $(document).ready(function() {
+                setTimeout(alert, 2000);
+                setTimeout(redirect, 6000);
 
-        <style>
-            html, body {
-                height: 100%;
-            }
+                function alert() {
+                    $('.subtitle').text('Oops! You haven\'t set up a goal yet, let\'s do that now!');
+                }
 
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato', sans-serif;
-            }
-
-            .container {
-                width: 100%;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-            }
-
-            .content {
-                margin: auto;
-            }
-
-            .title {
-                font-size: 96px;
-            }
-            .subtitle {
-                font-size: 30px;
-                text-align: center;
-            }
-
-            .navbar {
-                position: fixed;
-                top: 0px;
-                left: 0px;
-                width: 100%;
-                height: 50px;
-                display: flex;
-                justify-content: flex-end;
-            }
-            .navicon, .navicon a {
-                padding: 5px;
-                color: #000000;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="navbar">
-            @if(!Auth::check())
-                <div class="navicon">
-                    <a href="/login">Login</a>
-                </div>
-            @else
-                <div class="navicon">
-                    <a href="#"><i class="fa fa-gear"></i></a>
-                </div>
-                <div class="navicon">
-                    <a href="/logout">Logout</a>
-                </div>
-            @endif
-        </div>
-        <div class="container">
-            <div class="content">
-                @if(!Auth::check())
-                    <div class="title">Welcome!</div>
-                    <div class="subtitle">Login to get started!</div>
-                @else
-                    {{ Auth::user()->init() }}
-                    <div class="title">Let's Work Out!</div>
-                @endif
+                function redirect() {
+                    window.location = '/goal/create';
+                }
+            });
+        </script>
+    @elseif(Auth::check())
+        <script type="text/javascript">
+            $('.subtitle').text('It looks like you\'ve set up a goal. That\'s great! Let\'s get moving!');
+        </script>
+        <br />
+        <form action="/workout/add" method="POST">
+            {{ csrf_field() }}
+            <select class="form-control">
+                <option>Run</option>
+            </select>
+            <br />
+            <input type="text" name="points" class="form-control" placeholder="x miles" />
+            <br />
+            <button type="submit" class="btn btn-success">Log It!</button>
+        </form>
+        <br />
+        <label for="status">Progress to {{ Auth::user()->goal()->first()->name }}</label>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="{{ Auth::user()->points()->points }}" aria-valuemin="0" aria-valuemax="{{ Auth::user()->goal()->goal }}" style="width: {{ Auth::user()->progress() }}%">
+                <span class="sr-only">{{ Auth::user()->progress() }}% Complete</span>
             </div>
         </div>
-
-        @if(Auth::check())
-            <script type="text/javascript">
-                $(document).ready(function() {
-
-                });
-            </script>
-        @endif
-    </body>
-</html>
+    @endif
+@endsection
