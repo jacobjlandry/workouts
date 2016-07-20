@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWeeklyPointsTable extends Migration
+class CreateWorkoutsLogTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,12 @@ class CreateWeeklyPointsTable extends Migration
      */
     public function up()
     {
-        Schema::create('weekly_points', function(Blueprint $table) {
+        Schema::create('workout_logs', function(Blueprint $table) {
             $table->increments('id');
+            $table->integer('workout_id');
             $table->integer('user_id');
-            $table->date('start');
-            $table->date('end');
-            $table->float('points');
+            $table->float('value');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +28,6 @@ class CreateWeeklyPointsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('weekly_points');
+        Schema::drop('workout_logs');
     }
 }

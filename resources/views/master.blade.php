@@ -67,6 +67,9 @@
                 </div>
             @else
                 <div class="navicon">
+                    <a href="/workout/create">Create Workout</a>
+                </div>
+                <div class="navicon">
                     <a href="/logout">Logout</a>
                 </div>
             @endif

@@ -15,11 +15,13 @@ use Illuminate\Http\Request;
 Route::auth();
 
 Route::get('/', function () {
-    return view('welcome');
+    $workouts = \App\Workout::all();
+    return view('welcome', ['workouts' => $workouts]);
 });
 
 Route::get('/home', function () {
-    return view('welcome');
+    $workouts = \App\Workout::all();
+    return view('welcome', ['workouts' => $workouts]);
 });
 
 Route::get('/goal/create', function() {
@@ -32,8 +34,20 @@ Route::post('/goal/create', function(Request $request) {
     return redirect('/');
 });
 
+Route::get('workout/create', function() {
+    return view('workouts.create');
+});
+
+Route::post('workout/create', function(Request $request) {
+    \App\Workout::create(['name' => $request->input('name'), 'units' => $request->input('units'), 'value' => $request->input('value')]);
+
+    return redirect('/');
+});
+
 Route::post('/workout/add', function(Request $request) {
-    \App\WeeklyPoint::where('user_id', Auth::user()->id)->increment('points', $request->input('points'));
+    $workout = \App\Workout::find($request->input('workout'));
+    \App\WorkoutLog::create(['workout_id' => $workout->id, 'user_id' => Auth()->user()->id, 'value' => $request->input('points')]);
+    \App\WeeklyPoint::where('user_id', Auth::user()->id)->increment('points', $workout->points($request->input('points')));
 
     return redirect('/');
 });

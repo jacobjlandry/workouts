@@ -32,8 +32,10 @@
         <br />
         <form action="/workout/add" method="POST">
             {{ csrf_field() }}
-            <select class="form-control">
-                <option>Run</option>
+            <select class="form-control" name="workout">
+                @foreach($workouts as $workout)
+                    <option value="{{ $workout->id }}">{{ $workout->name }}</option>
+                @endforeach
             </select>
             <br />
             <input type="text" name="points" class="form-control" placeholder="x miles" />

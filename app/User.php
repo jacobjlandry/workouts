@@ -77,4 +77,14 @@ class User extends Authenticatable
     {
         $this->hasOne('\App\WeeklyPoint')->increment('points', $points);
     }
+
+    /**
+     * Get a log of all activity completed
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function log()
+    {
+        return $this->hasMany('\App\WorkoutLog');
+    }
 }
