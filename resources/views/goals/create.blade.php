@@ -5,7 +5,7 @@
     <div class="subtitle">What would you like to achieve?</div>
     <br />
     <div class="form">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
             <label for="goal">Goal</label>
             <input id="goal" name="goal" type="text" class="form-control" placeholder="Goal" />

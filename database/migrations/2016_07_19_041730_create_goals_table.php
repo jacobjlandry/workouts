@@ -17,6 +17,7 @@ class CreateGoalsTable extends Migration
             $table->integer('user_id');
             $table->string('name');
             $table->integer('goal');
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

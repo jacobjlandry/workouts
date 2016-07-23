@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Log;
 
 class User extends Authenticatable
 {
@@ -40,7 +41,12 @@ class User extends Authenticatable
 
     public function goal()
     {
-        return $this->hasOne('\App\Goal')->first();
+        if(!$this->hasOne('\App\Goal')->get()->isEmpty()) {
+            return $this->hasOne('\App\Goal')->first();
+        }
+        else {
+            return collect(array());
+        }
     }
 
     /**
@@ -53,9 +59,21 @@ class User extends Authenticatable
         return $this->hasOne('\App\WeeklyPoint')->first();
     }
 
-    public function progress()
+    /**
+     * Get progress (including extra credit)
+     *
+     * @param $extra
+     * @return float
+     */
+    public function progress($extra = 0)
     {
-        return round(($this->points()->points / $this->goal()->goal) * 100);
+        if(!$extra) {
+            return round(($this->points()->points / $this->goal()->goal) * 100);
+        }
+        else {
+            $points = $this->points()->points - ($this->goal()->goal * $extra);
+            return round(($points / $this->goal()->goal) * 100);
+        }
     }
 
     /**

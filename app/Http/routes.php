@@ -11,6 +11,7 @@
 |
 */
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 Route::auth();
 
@@ -29,7 +30,14 @@ Route::get('/goal/create', function() {
 });
 
 Route::post('/goal/create', function(Request $request) {
-    \App\Goal::create(['user_id' => Auth::user()->id, 'goal' => $request->input('goal'), 'name' => $request->input('reward')]);
+    $goal = \App\Goal::create(['user_id' => Auth::user()->id, 'goal' => $request->input('goal'), 'name' => $request->input('reward')]);
+    if ($request->hasFile('image'))
+    {
+        $file = $request->file('image');
+        $file->move(public_path('goals'), Auth::user()->id . $request->input('reward') . $file->getClientOriginalName());
+        $goal->image = Auth::user()->id . $request->input('reward') . $file->getclientOriginalName();
+        $goal->save();
+    }
 
     return redirect('/');
 });

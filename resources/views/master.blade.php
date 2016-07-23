@@ -57,6 +57,9 @@
                 font-size: 22px;
                 font-weight: bold;
             }
+            .extra-credit {
+                color: #DAA520;
+            }
         </style>
     </head>
     <body>
