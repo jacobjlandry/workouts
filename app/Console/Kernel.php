@@ -24,7 +24,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // reset points every sunday
+        $schedule->call(function() {
+            foreach(\App\WeeklyPoint::all() as $weeklyPoint) {
+                $weeklyPoint->delete();
+                \App\WeeklyPoint::create(['user_id' => $weeklyPoint->user_id, 'start' => date("Y-m-d", time()), 'end' => date('Y-m-d', strtotime('Saturday'))]);
+            }
+        })->sundays()->daily();
     }
 }

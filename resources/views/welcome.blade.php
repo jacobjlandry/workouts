@@ -38,7 +38,7 @@
                 @endforeach
             </select>
             <br />
-            <input type="text" name="points" class="form-control" placeholder="x miles" />
+            <input type="text" name="points" class="form-control" placeholder="number" />
             <br />
             <button type="submit" class="btn btn-success">Log It!</button>
         </form>
@@ -54,21 +54,26 @@
             <div class="subtitle">
                 You have achieved your weekly goal! Enjoy your reward!
             </div>
-            <img src="{{ asset('goals/' . Auth::user()->goal()->image) }}" />
             <br />
-            <label for="status">Progress to {{ Auth::user()->goal()->first()->name }} (Extra Credit)</label>
-            @for($x = 0; $x <= round(Auth::user()->progress()/100); $x++)
-                <div style="display: flex; flex-direction: row; flex-wrap: nowrap;">
-                    <div class="progress" style="order: 1; flex-grow: 99;">
-                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ Auth::user()->points()->points - ($x * Auth::user()->goal()->goal) }}" aria-valuemin="0" aria-valuemax="{{ Auth::user()->goal()->goal }}" style="width: {{ Auth::user()->progress($x) }}%">
-                            <span class="sr-only">{{ storage_path('app/public/goals') . Auth::user()->progress($x) }}% Complete</span>
+            <div style="text-align: center;">
+                <img class="goal-img" src="{{ asset('goals/' . Auth::user()->goal()->image) }}" />
+            </div>
+            <br />
+            <div>
+                <label for="status">Progress to {{ Auth::user()->goal()->first()->name }} (Extra Credit)</label>
+                @for($x = 0; $x <= round(Auth::user()->progress()/100); $x++)
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+                        <div class="progress" style="order: 1; flex-grow: 99;">
+                            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ Auth::user()->points()->points - ($x * Auth::user()->goal()->goal) }}" aria-valuemin="0" aria-valuemax="{{ Auth::user()->goal()->goal }}" style="width: {{ Auth::user()->progress($x) }}%">
+                                <span class="sr-only">{{ storage_path('app/public/goals') . Auth::user()->progress($x) }}% Complete</span>
+                            </div>
+                        </div>
+                        <div style="order: 2; flex-grow: 1; padding-left: 10px;">
+                            <i class="fa fa-trophy fa-2x extra-credit"></i>
                         </div>
                     </div>
-                    <div style="order: 2; flex-grow: 1; padding-left: 10px;">
-                        <i class="fa fa-trophy fa-2x extra-credit"></i>
-                    </div>
-                </div>
-            @endfor
+                @endfor
+            </div>
         @endif
     @endif
 @endsection

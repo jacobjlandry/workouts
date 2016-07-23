@@ -31,6 +31,7 @@
             }
 
             .content {
+                padding-top: 50px;
                 margin: auto;
             }
 
@@ -50,12 +51,22 @@
                 height: 50px;
                 display: flex;
                 justify-content: flex-end;
+                background: #ffffff;
             }
             .navicon, .navicon a {
                 padding: 5px;
                 color: #000000;
                 font-size: 22px;
                 font-weight: bold;
+            }
+            .results {
+                display: flex;
+
+                .goal-img {
+                    max-width: 150px;
+                    max-height: 400px;
+                    overflow: hidden;
+                }
             }
             .extra-credit {
                 color: #DAA520;
@@ -69,9 +80,11 @@
                     <a href="/login">Login</a>
                 </div>
             @else
-                <div class="navicon">
-                    <a href="/workout/create">Create Workout</a>
-                </div>
+                @if(Auth::user()->is('admin') || Auth::user()->is('editor'))
+                    <div class="navicon">
+                        <a href="/workout/create">Create Workout</a>
+                    </div>
+                @endif
                 <div class="navicon">
                     <a href="/logout">Logout</a>
                 </div>

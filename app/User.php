@@ -34,9 +34,14 @@ class User extends Authenticatable
             \App\WeeklyPoint::create([
                 'user_id' => $this->id,
                 'start' => date('Y-m-d', strtotime('last Sunday')),
-                'end' => date('Y-m-d', strtotime('next Saturday'))
+                'end' => date('Y-m-d', strtotime('Saturday'))
             ]);
         }
+    }
+
+    public function is($role)
+    {
+        return $this->$role;
     }
 
     public function goal()
