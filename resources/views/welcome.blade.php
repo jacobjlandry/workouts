@@ -34,11 +34,11 @@
             {{ csrf_field() }}
             <select class="form-control" name="workout">
                 @foreach($workouts as $workout)
-                    <option value="{{ $workout->id }}">{{ $workout->name }}</option>
+                    <option value="{{ $workout->id }}">{{ $workout->name }} ({{ $workout->value }} points per {{ preg_replace('/s$/', '', $workout->units) }})</option>
                 @endforeach
             </select>
             <br />
-            <input type="text" name="points" class="form-control" placeholder="number" />
+            <input type="text" name="points" class="form-control" placeholder="{{ $workout->units }}" />
             <br />
             <button type="submit" class="btn btn-success">Log It!</button>
         </form>

@@ -30,6 +30,6 @@ class Kernel extends ConsoleKernel
                 $weeklyPoint->delete();
                 \App\WeeklyPoint::create(['user_id' => $weeklyPoint->user_id, 'start' => date("Y-m-d", time()), 'end' => date('Y-m-d', strtotime('Saturday'))]);
             }
-        })->sundays()->daily();
+        })->sundays();
     }
 }
