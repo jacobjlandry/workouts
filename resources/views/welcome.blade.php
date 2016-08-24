@@ -28,17 +28,23 @@
     @elseif(Auth::check())
         <script type="text/javascript">
             $('.subtitle').text('It looks like you\'ve set up a goal. That\'s great! Let\'s get moving!');
+            $('.subtitle').addClass('hide-small-screen');
         </script>
         <br />
         <form action="/workout/add" method="POST">
             {{ csrf_field() }}
-            <select class="form-control" name="workout">
-                @foreach($workouts as $workout)
-                    <option value="{{ $workout->id }}">{{ $workout->name }} ({{ $workout->value }} points per {{ preg_replace('/s$/', '', $workout->units) }})</option>
-                @endforeach
-            </select>
+            <div style="display: flex;">
+                <select class="form-control" id="workout" name="workout">
+                    @foreach($workouts as $workout)
+                        <option value="{{ $workout->id }}" unit="{{ $workout->units }}">{{ $workout->name }} ({{ $workout->value }} points per {{ preg_replace('/s$/', '', $workout->units) }})</option>
+                    @endforeach
+                </select>
+                <div class="show-small-screen" style="padding: 30px;">
+                    <i class="fa fa-caret-down" style="font-size: 95px; color: #cccccc;"></i>
+                </div>
+            </div>
             <br />
-            <input type="text" name="points" class="form-control" placeholder="{{ $workout->units }}" />
+            <input type="text" name="points" class="form-control" id="workoutunits" placeholder="{{ @$workouts->first()->units }}" />
             <br />
             <button type="submit" class="btn btn-success">Log It!</button>
         </form>
@@ -51,8 +57,11 @@
                 </div>
             </div>
         @else
-            <div class="subtitle">
+            <div class="subtitle hide-small-screen">
                 You have achieved your weekly goal! Enjoy your reward!
+            </div>
+            <div class="subtitle show-small-screen">
+                You did it!
             </div>
             <br />
             <div style="text-align: center;">
@@ -68,7 +77,7 @@
                                 <span class="sr-only">{{ storage_path('app/public/goals') . Auth::user()->progress($x) }}% Complete</span>
                             </div>
                         </div>
-                        <div style="order: 2; flex-grow: 1; padding-left: 10px;">
+                        <div class="trophy" style="order: 2; flex-grow: 1; padding-left: 10px;">
                             <i class="fa fa-trophy fa-2x extra-credit"></i>
                         </div>
                     </div>
@@ -76,4 +85,12 @@
             </div>
         @endif
     @endif
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#workout').on('change', function(e) {
+                var units = $('#workout option:selected').attr('unit');
+                $('#workoutunits').attr('placeholder', units);
+            });
+        });
+    </script>
 @endsection
